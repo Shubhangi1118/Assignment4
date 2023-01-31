@@ -17,7 +17,7 @@ namespace Assignment4.Controllers
 
     public class HomeController : Controller
     {
-
+        private readonly MongoClient Client = new MongoClient("mongodb://localhost:27017");
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -37,9 +37,7 @@ namespace Assignment4.Controllers
         }
         public string AdddateTimeIP(string Date, string IP)
         {
-
-            MongoClient database_Client = new MongoClient("mongodb://localhost:27017");
-            var db_user = database_Client.GetDatabase("InfoCollection");
+            var db_user = Client.GetDatabase("InfoCollection");
             var collect = db_user.GetCollection<BsonDocument>("Info");
             var doc = new BsonDocument { { "Date_Time", Date }, { "IP", IP } };
             collect.InsertOne(doc);
@@ -55,8 +53,7 @@ namespace Assignment4.Controllers
         }
         public string GetUserData()
         {
-            MongoClient database_Client = new MongoClient("mongodb://localhost:27017");
-            var db_user = database_Client.GetDatabase("InfoCollection");
+            var db_user = Client.GetDatabase("InfoCollection");
             var collect = db_user.GetCollection<BsonDocument>("Info");
 
             var databaselist = collect.Find(new BsonDocument()).ToList();
@@ -75,9 +72,7 @@ namespace Assignment4.Controllers
         [HttpPost]
         public IActionResult UserInfo(Home User)
         {
-            MongoClient client_db = new MongoClient("mongodb://localhost:27017");
-
-            var user_db = client_db.GetDatabase("User_Data");
+            var user_db = Client.GetDatabase("User_Data");
             var collection = user_db.GetCollection<BsonDocument>("User");
             var document = new BsonDocument { { "_id", User.Id }, { "Name", User.Name }, { "Country", User.Country } };
             collection.InsertOne(document);
@@ -86,7 +81,6 @@ namespace Assignment4.Controllers
         }
         public ActionResult User()
         {
-            MongoClient Client = new MongoClient("mongodb://localhost:27017");
             var db = Client.GetDatabase("User_Data");
             var collection = db.GetCollection<Home>("User").Find(new BsonDocument()).ToList();
 
@@ -115,7 +109,6 @@ namespace Assignment4.Controllers
         [HttpPost]
         public IActionResult AddImage(UploadImage img)
         {
-            MongoClient Client = new MongoClient("mongodb://localhost:27017");
             var db = Client.GetDatabase("ImageDB");
             var collect = db.GetCollection<BsonDocument>("ImageData");
             GridFSBucket bucket = new GridFSBucket(db);
@@ -141,7 +134,6 @@ namespace Assignment4.Controllers
         }
         public async Task<ActionResult> DisplayImage()
         {
-            MongoClient Client = new MongoClient("mongodb://localhost:27017");
             var db = Client.GetDatabase("ImageDB");
             GridFSBucket bucket = new GridFSBucket(db);
             var collect = db.GetCollection<BsonDocument>("ImageData");
@@ -162,7 +154,6 @@ namespace Assignment4.Controllers
         [HttpPost]
         public IActionResult EditImage(string Id, UploadImage img)
         {
-            MongoClient Client = new MongoClient("mongodb://localhost:27017");
             var db = Client.GetDatabase("ImageDB");
             var collect = db.GetCollection<BsonDocument>("ImageData");
             GridFSBucket bucket = new GridFSBucket(db);
@@ -198,7 +189,6 @@ namespace Assignment4.Controllers
         [HttpPost]
         public IActionResult EditDescription(string Id, string Description)
         {
-            MongoClient Client = new MongoClient("mongodb://localhost:27017");
             var db = Client.GetDatabase("ImageDB");
             var collect = db.GetCollection<BsonDocument>("ImageData");
             GridFSBucket bucket = new GridFSBucket(db);
