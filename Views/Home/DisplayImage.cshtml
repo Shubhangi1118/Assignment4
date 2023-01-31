@@ -1,0 +1,36 @@
+﻿<style></style>
+@model IEnumerable<Assignment4.Models.ViewImage>
+@{
+    ViewBag.Title = "Images";
+}
+@foreach (var item in Model)
+{
+    <p onclick="fun()" id="btn">
+        <img src="@item.url">
+        @using (Html.BeginForm("EditImage", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <input type="text" name="Id" style="display:none;" value=@item.Id.ToString()>
+            <input type="file" id="myfile" name="Image" />
+            <input type="submit" value="Edit" class="btn btn-default" />
+        }
+    </p>
+    <script>
+        function fun() {
+            document.getElementById("p").style.display = "block";
+        }
+    </script>
+
+    <p class="inner" id="p" style="display:none;">
+        @item.Description
+        @using (Html.BeginForm("EditDescription", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <input type="text" name="Id" style="display:none;" value=@item.Id.ToString()>
+            <input type="text" id="Description" name="description" />
+            <input type="submit" value="Edit" class="btn btn-default" />
+        }
+    </p>
+
+
+
+
+}
