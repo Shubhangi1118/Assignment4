@@ -3,34 +3,28 @@
 @{
     ViewBag.Title = "Images";
 }
-@foreach (var item in Model)
+@foreach (var image in Model)
 {
-    <p onclick="fun()" id="btn">
-        <img src="@item.url">
-        @using (Html.BeginForm("EditImage", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    <img src="@image.url" alt="@image.Title" data-description="@image.Description" onclick="showDescription(this)">
+    @using (Html.BeginForm("EditImage", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <input type="text" name="Id" style="display:none;" value=@item.Id.ToString()>
+            <input type="text" name="Id" style="display:none;" value=@image.Id.ToString()>
             <input type="file" id="myfile" name="Image" />
             <input type="submit" value="Edit" class="btn btn-default" />
         }
-    </p>
-    <script>
-        function fun() {
-            document.getElementById("p").style.display = "block";
-        }
-    </script>
-
-    <p class="inner" id="p" style="display:none;">
-        @item.Description
         @using (Html.BeginForm("EditDescription", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <input type="text" name="Id" style="display:none;" value=@item.Id.ToString()>
+            <input type="text" name="Id" style="display:none;" value=@image.Id.ToString()>
             <input type="text" id="Description" name="description" />
             <input type="submit" value="Edit" class="btn btn-default" />
         }
-    </p>
-
-
-
-
 }
+
+<div id="description-container"></div>
+
+<script>
+    function showDescription(image) {
+        var description = image.dataset.description;
+        document.getElementById("description-container").innerHTML = description;
+    }
+</script>
